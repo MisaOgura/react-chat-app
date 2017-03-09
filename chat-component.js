@@ -1,7 +1,7 @@
 const ChatApp = React.createClass({
 	getInitialState: function () {
 		return {
-			username: 'anon',
+			username: 'guest',
 			messages: [],
 			socket: window.io('http://localhost:3000')
 		}
@@ -15,7 +15,11 @@ const ChatApp = React.createClass({
 		})
 	},
 	submitMessage: function () {
-		const message = document.getElementById('message').value
+		const body = document.getElementById('message').value
+		const message = {
+			body: body,
+			username: this.state.username
+		}
 		// sending a new message to the server
 		this.state.socket.emit('newMessage', message)
 	},
@@ -28,7 +32,7 @@ const ChatApp = React.createClass({
 		
 		const messages = this.state.messages.map(function (msg, i) {
 			return (
-				<li key={i}>{username} said: {msg}</li>
+				<li key={i}>{msg.username} said: {msg.body}</li>
 			)
 		})
 		
